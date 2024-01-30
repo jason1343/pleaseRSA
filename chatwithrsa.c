@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+int lcm(int p, int q);
+
 int p = 0;
 int q = 0;
 
@@ -38,8 +40,26 @@ int main(){
     printf("p, q : %d, %d \n", p, q);
 
     //N 구하기
-    long long N = p*q;
-    printf("N : %lld", N);
+    int N = p*q;
+    printf("N : %d\n", N);
+
+    //L 구하기
+    int L = lcm(p - 1, q - 1);
+
+    if(L == -1)printf("Unexpected Error =(");
+    else printf("%d", L);
 
     return 0;
+}
+
+int lcm(int p, int q){
+    int bigger_val = (p > q) ? p : q;
+    int i = bigger_val;
+
+    for(int i = bigger_val; i <= (p*q); i++){
+        if(i % p == 0 && i % q ==0){
+            return i;
+        }
+    }
+    return -1;
 }
