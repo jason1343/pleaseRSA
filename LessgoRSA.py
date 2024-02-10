@@ -1,4 +1,4 @@
-import gmpy2
+from gmpy2 import *
 from random import *
 
 # 무작위 소수 p, q 구하기
@@ -100,13 +100,30 @@ print("D : ", end="")
 print(D)
 
 ##############암호화##############
-M = int(input("Message : "))
-encryptedM = gmpy2.powmod(M, E, N)
-print("Encrypted Message : ", encryptedM)
+encryptedL = []
+decryptedL = []
+decryptedL2 = []
 
-##############복호화##############
-decryptedM = gmpy2.powmod(encryptedM, D, N)
-print("Decrypted Message : ", decryptedM)
+Message = list(input("Message : "))
+for M in Message:
+    encryptedL.append(gmpy2.powmod(ord(M), E, N))
+
+#이제 채팅 프로그램 만드는 단계입니다.
+print(str(encryptedL))
+
+
+
+
+
+
+##############복호화(수신자 기능)##############
+# for En in encryptedL:
+#     decryptedL.append(gmpy2.powmod(En, D, N))
+
+# for de in decryptedL:
+#     decryptedL2.append(chr(de))
+    
+# print("".join(decryptedL2))
 
         
     
