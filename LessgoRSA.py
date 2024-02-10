@@ -152,7 +152,3 @@ receiver = threading.Thread(target=receive, args=(connectionSock,))
 
 sender.start()
 receiver.start()
-
-
-        
-    
