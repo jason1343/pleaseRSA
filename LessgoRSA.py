@@ -99,31 +99,60 @@ D = gmpy2.invert(E, L)
 print("D : ", end="")
 print(D)
 
-##############암호화##############
-encryptedL = []
-decryptedL = []
-decryptedL2 = []
 
-Message = list(input("Message : "))
-for M in Message:
-    encryptedL.append(gmpy2.powmod(ord(M), E, N))
+############채팅############
+from socket import *
+import threading, re
 
-#이제 채팅 프로그램 만드는 단계입니다.
-print(str(encryptedL))
+def send(sock):
+    while True:
+        encryptedL = []
 
-
-
-
-
-
-##############복호화(수신자 기능)##############
-# for En in encryptedL:
-#     decryptedL.append(gmpy2.powmod(En, D, N))
-
-# for de in decryptedL:
-#     decryptedL2.append(chr(de))
+        Message = list(input(""))
+        
+        for M in Message:
+            encryptedL.append(gmpy2.powmod(ord(M), E, N))
+            
+        sock.send(str(encryptedL).encode('utf-8'))
     
-# print("".join(decryptedL2))
+def receive(sock):
+    while True:
+        data = sock.recv(1024).decode('utf-8')
+        if data :
+            decryptedL = []
+            decryptedL2 = []
+            
+            integer_values = [int(match.group(1)) for match in re.finditer(r'mpz\((\d+)\)', data)]
+            for En in integer_values:
+                decryptedL.append(gmpy2.powmod(En, D, N))
+                
+            for de in decryptedL:
+                decryptedL2.append(chr(de))
+
+            dataDecrypted = "".join(decryptedL2)
+            
+            print('\n상대방 : ' + dataDecrypted + '\n')
+        else : pass
+
+port = int(input("port : "))
+serverSock = socket(AF_INET, SOCK_STREAM)
+serverSock.bind(('', port))
+serverSock.listen(1)
+
+connectionSock, addr = serverSock.accept()
+
+print(str(addr),'에서 접속이 확인되었습니다.')
+connectionSock.send(str(E).encode('utf-8'))
+connectionSock.send(str(D).encode('utf-8'))
+connectionSock.send(str(N).encode('utf-8'))
+
+
+sender = threading.Thread(target=send, args=(connectionSock,))
+receiver = threading.Thread(target=receive, args=(connectionSock,))
+
+sender.start()
+receiver.start()
+
 
         
     
