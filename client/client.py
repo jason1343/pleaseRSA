@@ -17,9 +17,10 @@ def send(sock):
 def receive(sock):
     while True:
         data = sock.recv(4096)
-        data = pickle.loads(data)
 
         if data :
+            data = pickle.loads(data)
+            
             decryptedL = []
             decryptedL2 = []
             
@@ -35,14 +36,13 @@ def receive(sock):
         else : pass
 
 port = int(input("port : "))
-clientSock = socket(AF_INET, SOCK_STREAM)
-clientSock.connect(('127.0.0.1', port))
-print('연결 확인 됐습니다.')
+E = int(input("E : "))
+D = int(input("D : "))
+N = int(input("N : "))
 
-##D, N을 전달받아야함
-E = int(clientSock.recv(1024).decode('utf-8'))
-D = int(clientSock.recv(1024).decode('utf-8'))
-N = int(clientSock.recv(1024).decode('utf-8'))
+clientSock = socket(AF_INET, SOCK_STREAM)
+clientSock.connect(('43.202.33.84', port))
+print('연결 확인 됐습니다.')
 
 sender = threading.Thread(target=send, args=(clientSock,))
 receiver = threading.Thread(target=receive, args=(clientSock,))

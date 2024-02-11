@@ -120,9 +120,10 @@ def send(sock):
 def receive(sock):
     while True:
         data = sock.recv(4096)
-        data = pickle.loads(data)
         
         if data :
+            data = pickle.loads(data)
+            
             decryptedL = []
             decryptedL2 = []
             
@@ -145,10 +146,6 @@ serverSock.listen(1)
 connectionSock, addr = serverSock.accept()
 
 print(str(addr),'에서 접속이 확인되었습니다.')
-connectionSock.send(str(E).encode('utf-8'))
-connectionSock.send(str(D).encode('utf-8'))
-connectionSock.send(str(N).encode('utf-8'))
-
 
 sender = threading.Thread(target=send, args=(connectionSock,))
 receiver = threading.Thread(target=receive, args=(connectionSock,))
