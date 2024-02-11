@@ -36,7 +36,6 @@ def receive(sock):
 
 port = int(input("port : "))
 clientSock = socket(AF_INET, SOCK_STREAM)
-#clientSock.connect(('15.165.19.31', port))
 clientSock.connect(('127.0.0.1', port))
 print('연결 확인 됐습니다.')
 
