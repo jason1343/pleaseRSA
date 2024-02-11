@@ -49,7 +49,3 @@ receiver = threading.Thread(target=receive, args=(clientSock,))
 
 sender.start()
 receiver.start()
-
-# while True:
-#     time.sleep(1)
-#     pass
