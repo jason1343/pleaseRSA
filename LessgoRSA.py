@@ -102,7 +102,7 @@ print(D)
 
 ############채팅############
 from socket import *
-import threading, re
+import threading, pickle
 
 def send(sock):
     while True:
@@ -112,18 +112,21 @@ def send(sock):
         
         for M in Message:
             encryptedL.append(gmpy2.powmod(ord(M), E, N))
-            
-        sock.send(str(encryptedL).encode('utf-8'))
+        
+        data = pickle.dumps(encryptedL)
+        
+        sock.sendall(data)
     
 def receive(sock):
     while True:
-        data = sock.recv(1024).decode('utf-8')
+        data = sock.recv(4096)
+        data = pickle.loads(data)
+        
         if data :
             decryptedL = []
             decryptedL2 = []
             
-            integer_values = [int(match.group(1)) for match in re.finditer(r'mpz\((\d+)\)', data)]
-            for En in integer_values:
+            for En in data:
                 decryptedL.append(gmpy2.powmod(En, D, N))
                 
             for de in decryptedL:

@@ -1,5 +1,5 @@
 from socket import *
-import threading, re, gmpy2
+import threading, gmpy2, pickle
 
 def send(sock):
     while True:
@@ -9,18 +9,21 @@ def send(sock):
         
         for M in Message:
             encryptedL.append(gmpy2.powmod(ord(M), E, N))
-            
-        sock.send(str(encryptedL).encode('utf-8'))
+        
+        data = pickle.dumps(encryptedL)
+        
+        sock.sendall(data)
     
 def receive(sock):
     while True:
-        data = sock.recv(1024).decode('utf-8')
+        data = sock.recv(4096)
+        data = pickle.loads(data)
+
         if data :
             decryptedL = []
             decryptedL2 = []
             
-            dataL = [int(match.group(1)) for match in re.finditer(r'mpz\((\d+)\)', data)]
-            for En in dataL:
+            for En in data:
                 decryptedL.append(gmpy2.powmod(En, D, N))
                 
             for de in decryptedL:
@@ -33,8 +36,8 @@ def receive(sock):
 
 port = int(input("port : "))
 clientSock = socket(AF_INET, SOCK_STREAM)
+#clientSock.connect(('15.165.19.31', port))
 clientSock.connect(('127.0.0.1', port))
-
 print('연결 확인 됐습니다.')
 
 ##D, N을 전달받아야함
