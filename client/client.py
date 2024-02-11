@@ -35,13 +35,14 @@ def receive(sock):
             print('\n상대방 : ' + dataDecrypted + '\n')
         else : pass
 
+ip = input("IP : ")
 port = int(input("port : "))
 E = int(input("E : "))
 D = int(input("D : "))
 N = int(input("N : "))
 
 clientSock = socket(AF_INET, SOCK_STREAM)
-clientSock.connect(('43.202.33.84', port))
+clientSock.connect((ip, port))
 print('연결 확인 됐습니다.')
 
 sender = threading.Thread(target=send, args=(clientSock,))
